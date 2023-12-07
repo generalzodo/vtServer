@@ -9,7 +9,8 @@ import swaggerUi from 'swagger-ui-express';
 import dotenv from 'dotenv';
 dotenv.config(); 
 import { Todo, User,Error } from './schemas.js';
-import todoRoutes from './routes/todo.route.js';
+import RootRouter from "./routes/root.js";
+
 const app = express();
 
 // Connect to MongoDB
@@ -34,8 +35,18 @@ const logger = winston.createLogger({
     ]
 });
 
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET, PUT,PATCH, POST, DELETE");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Authorization, Content-Type, Accept"
+  );
+  next();
+});
+
 // HTTP Request Logging with Morgan
-app.use(morgan('combined', { stream: { write: (message) => logger.info(message.trim()) } }));
+// app.use(morgan('combined', { stream: { write: (message) => logger.info(message.trim()) } }));
 
 const options = {
     definition: {
@@ -59,7 +70,7 @@ const options = {
   const specs = swaggerJsdoc(options);
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 // Use Todo routes
-app.use('/api', todoRoutes);
+app.use("/api", RootRouter);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

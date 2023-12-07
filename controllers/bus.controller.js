@@ -1,44 +1,47 @@
-import Todo from '../models/todo.model.js';
+import Bus from '../models/bus.model.js';
 /**
- * Create a new Todo item.
+ * Create a new Bus item.
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
  * @returns {Promise<void>}
  */
-// Create a new Todo
-export const fetchTodos = async (req, res) => {
+// Create a new Bus
+export const fetchBuses = async (req, res) => {
   try {
-    const result =   Todo.find({});
+    const result =   await Bus.find({});
+    res.status(201).json({success:true, data: result});
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+export const fetchSingleBus = async (req, res) => {
+  try {
+    const result =   Bus.findOne({ _id: req.params.id });
     res.status(201).json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-export const fetchSingleTodo = async (req, res) => {
+export const createBus = async (req, res) => {
   try {
-    const result =   Todo.findOne({ _id: req.params._id });
-    res.status(201).json(result);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
-
-export const createTodo = async (req, res) => {
-  try {
-    const newTodo = new Todo({
+    const newBus = new Bus({
       title: req.body.title,
-      description: req.body.description
+      photo: req.body.photo,
+      type: req.body.type,
+      seats: req.body.seats,
+      status: req.body.status,
     });
 
-    const result = await newTodo.save();
+    const result = await newBus.save();
     res.status(201).json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-export const updateTodo = async (req, res) => {
+export const updateBus = async (req, res) => {
 
   let isError = { error: false, message: "" };
   for (const key in req.body) {
@@ -59,16 +62,16 @@ export const updateTodo = async (req, res) => {
 
   }
   try {
-    const result = await Todo.updateOne({ _id: req.params._id }, { ...req.body });
+    const result = await Bus.updateOne({ _id: req.params.id }, { ...req.body });
     res.status(201).json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-export const deleteTodo = async (req, res) => {
+export const deleteBus = async (req, res) => {
   try {
-    const result =  Todo.deleteOne({ _id: req.params._id })
+    const result =  await Bus.deleteOne({ _id: req.params.id })
     res.status(201).json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });

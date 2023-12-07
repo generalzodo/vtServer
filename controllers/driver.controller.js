@@ -1,44 +1,49 @@
-import Todo from '../models/todo.model.js';
+import Driver from '../models/drivers.model.js';
 /**
- * Create a new Todo item.
+ * Create a new Driver item.
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
  * @returns {Promise<void>}
  */
-// Create a new Todo
-export const fetchTodos = async (req, res) => {
+// Create a new Driver
+export const fetchDrivers = async (req, res) => {
   try {
-    const result =   Todo.find({});
+    const result =   await Driver.find({});
+    res.status(201).json({success:true, data: result});
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+export const fetchSingleDriver = async (req, res) => {
+  try {
+    const result =   Driver.findOne({ _id: req.params.id });
     res.status(201).json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-export const fetchSingleTodo = async (req, res) => {
+export const createDriver = async (req, res) => {
   try {
-    const result =   Todo.findOne({ _id: req.params._id });
-    res.status(201).json(result);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
-
-export const createTodo = async (req, res) => {
-  try {
-    const newTodo = new Todo({
-      title: req.body.title,
-      description: req.body.description
+    const newDriver = new Driver({
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      phone: req.body.phone,
+      address: req.body.address,
+      status: req.body.status,
+      state: req.body.state,
+      createdAt: req.body.createdAt,
     });
 
-    const result = await newTodo.save();
+    const result = await newDriver.save();
     res.status(201).json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-export const updateTodo = async (req, res) => {
+export const updateDriver = async (req, res) => {
 
   let isError = { error: false, message: "" };
   for (const key in req.body) {
@@ -59,16 +64,16 @@ export const updateTodo = async (req, res) => {
 
   }
   try {
-    const result = await Todo.updateOne({ _id: req.params._id }, { ...req.body });
+    const result = await Driver.updateOne({ _id: req.params.id }, { ...req.body });
     res.status(201).json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-export const deleteTodo = async (req, res) => {
+export const deleteDriver = async (req, res) => {
   try {
-    const result =  Todo.deleteOne({ _id: req.params._id })
+    const result = await Driver.deleteOne({ _id: req.params.id })
     res.status(201).json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });

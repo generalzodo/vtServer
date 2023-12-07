@@ -1,5 +1,5 @@
 import express from 'express';
-import { createTodo } from '../controllers/todo.controller.js';
+import { createTodo, deleteTodo, fetchSingleTodo, fetchTodos, updateTodo } from '../controllers/todo.controller.js';
 
 const router = express.Router();
 /**
@@ -37,6 +37,10 @@ const router = express.Router();
  */
 // Create a new Todo item
 router.post('/todos', createTodo);
+router.patch('/todos/:id', updateTodo);
+router.get('/todos', fetchTodos);
+router.get('/todos/:id', fetchSingleTodo);
+router.delete('/todos/:id', deleteTodo);
 
 // Define other routes for reading, updating, and deleting Todos
 

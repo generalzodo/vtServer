@@ -1,44 +1,56 @@
-import Todo from '../models/todo.model.js';
+import User from '../models/users.model.js';
+import bcrypt from "bcrypt";
+
 /**
- * Create a new Todo item.
+ * Create a new User item.
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
  * @returns {Promise<void>}
  */
-// Create a new Todo
-export const fetchTodos = async (req, res) => {
+// Create a new User
+export const fetchUsers = async (req, res) => {
   try {
-    const result =   Todo.find({});
+    const result =   await User.find({});
+    res.status(201).json({success:true, data: result});
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+export const fetchSingleUser = async (req, res) => {
+  try {
+    const result =   User.findOne({ _id: req.params.id });
     res.status(201).json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-export const fetchSingleTodo = async (req, res) => {
+export const createUser = async (req, res) => {
   try {
-    const result =   Todo.findOne({ _id: req.params._id });
-    res.status(201).json(result);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
+  const salt = await bcrypt.genSalt(10);
+  const hash = await bcrypt.hash(req.body.password, salt);
 
-export const createTodo = async (req, res) => {
-  try {
-    const newTodo = new Todo({
-      title: req.body.title,
-      description: req.body.description
+    const newUser = new User({
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      phone: req.body.phone,
+      dob: req.body.dob,
+      email: req.body.email,
+      // address: req.body.address,
+      state: req.body.state,
+      password: hash
+      
     });
 
-    const result = await newTodo.save();
+    const result = await newUser.save();
     res.status(201).json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-export const updateTodo = async (req, res) => {
+export const updateUser = async (req, res) => {
 
   let isError = { error: false, message: "" };
   for (const key in req.body) {
@@ -59,16 +71,16 @@ export const updateTodo = async (req, res) => {
 
   }
   try {
-    const result = await Todo.updateOne({ _id: req.params._id }, { ...req.body });
+    const result = await User.updateOne({ _id: req.params.id }, { ...req.body });
     res.status(201).json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-export const deleteTodo = async (req, res) => {
+export const deleteUser = async (req, res) => {
   try {
-    const result =  Todo.deleteOne({ _id: req.params._id })
+    const result = await User.deleteOne({ _id: req.params.id })
     res.status(201).json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
