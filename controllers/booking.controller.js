@@ -32,7 +32,7 @@ export const createBooking = async (req, res) => {
     let bookingId =generateBookingId();
     console.log(emergency);
 
-    let trip = Trip.findById(req.body.trip)
+    let trip = await Trip.findById(req.body.trip)
 
     for await (const it of passengers) {
       
@@ -47,8 +47,8 @@ export const createBooking = async (req, res) => {
       gender: it.gender.title,
       amount: req.body.amount,
       paystack_ref: req.body.trans_ref,
-      bookingId: bookingId,
-      uniqueBookingId: generateBookingId(),
+      bookingId: 'T'+ bookingId,
+      uniqueBookingId: 'T'+generateBookingId(),
       emergencyFirstName: emergency.firstName,
       emergencyLastName: emergency.lastName,
       emergencyEmail: emergency.email,
@@ -58,11 +58,12 @@ export const createBooking = async (req, res) => {
     });
     await newBooking.save();
     trip.availableSeats = trip.availableSeats - 1
+    
     trip.save();
     
   }
 
-    const result = {status: 'success'}
+    const result = {status: 'success', data: 'T'+ bookingId}
     res.status(201).json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });

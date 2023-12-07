@@ -1,5 +1,7 @@
 import User from '../models/users.model.js';
 import bcrypt from "bcrypt";
+// import jwt from 'jsonwebtoken'
+// import mail from '../../mail.js';
 
 /**
  * Create a new User item.
@@ -39,12 +41,62 @@ export const createUser = async (req, res) => {
       email: req.body.email,
       // address: req.body.address,
       state: req.body.state,
-      password: hash
-      
+      password: hash,
+      uuid: generateUserId()
+
     });
 
     const result = await newUser.save();
     res.status(201).json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+export const loginUser = async (req, res) => {
+  try {
+    const user = await User.findOne({
+      email: req.body.email.toLowerCase(),
+    })
+    console.log(user);
+    
+    if (!user) {
+      throw new Error('No such user found')
+    }
+    if (user.status == 'Locked') {
+      throw new Error('You have been locked out of this system. please contact the adminstrator')
+    }
+    if (user.status == 'Inactive') {
+      throw new Error('Kindly verify your email used during sign up to gain access')
+    }
+    // 2
+    console.log(user);
+    
+    const valid = await bcrypt.compare(req.body.password, user.password)
+    if (!valid) {
+      throw new Error('Invalid password')
+    }
+    
+    const token =  'fmefmekfmekfme'
+    // jwt.sign({
+    //   userId: user._id
+    // }, APP_SECRET);
+    
+    // let activity = new Activity({
+    //   // type: data.type,
+    //   text: "Logged in",
+    //   operation: "Login",
+    //   device: args.device,
+    //   userId: user._id,
+    // })
+    // await activity.save();
+    
+    // 3
+    
+    res.status(201).json({
+      token,
+      user,
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -86,3 +138,13 @@ export const deleteUser = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+function generateUserId() {
+  const timestamp = new Date().getTime(); // Get current timestamp
+  const randomPart = Math.floor(Math.random() * 10); // Add a random number for extra uniqueness
+
+  // Combine timestamp and random number
+  const bookingId = `${timestamp}${randomPart}`;
+
+  return bookingId;
+}

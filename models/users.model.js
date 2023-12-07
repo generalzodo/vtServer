@@ -6,6 +6,9 @@ const userSchema = new Schema({
   dob: {
     type: String
   },
+  state: {
+    type: String
+  },
 
   email: {
     type: String,
@@ -35,10 +38,10 @@ const userSchema = new Schema({
   account_name: {
     type: String,
   },
-  first_name: {
+  firstName: {
     type: String,
   },
-  last_name:{
+  lastName:{
     type: String,
   },
   device: {

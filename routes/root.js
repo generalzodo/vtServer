@@ -7,6 +7,7 @@ import DriverRouter from "./driver.route.js";
 import BookingRouter from "./booking.route.js";
 import BusRouter from "./bus.route.js";
 import TripRouter from "./trip.route.js";
+import UserRouter from "./user.route.js";
 // import { isLoggedIn } from "../middleware/index.js";
 
 const router = Router();
@@ -18,6 +19,7 @@ router.get("/", (req, res) => {
 });
 
 // router.use("/auth", AuthRouter);
+router.use("/users", UserRouter);
 router.use("/routes", RouteRouter);
 router.use("/locations", LocationRouter);
 router.use("/booking", BookingRouter);
