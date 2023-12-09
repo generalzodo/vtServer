@@ -11,6 +11,7 @@ dotenv.config();
 import { Todo, User,Error } from './schemas.js';
 import RootRouter from "./routes/root.js";
 
+import './cronjob'; // Importing the cronjob file
 const app = express();
 
 // Connect to MongoDB

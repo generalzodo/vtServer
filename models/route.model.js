@@ -6,8 +6,9 @@ const routeSchema = new mongoose.Schema({
     bus: { type: Schema.Types.ObjectId, required: true, ref: "Bus" },
     destination: { type: String },
     origin: { type: String },
-    amount: { type: Number },
+    price: { type: Number },
     recurrentDays:[],
+    totalTrips: {type: Number} ,
     totalTrips: {type: Number} ,
     createdAt: { type: Date, default: Date.now }
 });
