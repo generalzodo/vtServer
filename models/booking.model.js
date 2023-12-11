@@ -17,7 +17,10 @@ const bookingSchema = new mongoose.Schema({
     emergencyLastName:{ type: String, required: true }, 
     emergencyEmail:{ type: String, required: true }, 
     emergencyPhone:{ type: String, required: true }, 
+    type: {type:String},
+    category: {type: String},
     trip: { type: Schema.Types.ObjectId, required: true, ref: "Trip" },
+    returnTrip: { type: Schema.Types.ObjectId, ref: "Trip" },
     status: { type: String, default: 'Active' },
     createdAt: { type: Date, default: Date.now },
 });

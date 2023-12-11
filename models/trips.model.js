@@ -6,6 +6,7 @@ const tripSchema = new mongoose.Schema({
     route: { type: Schema.Types.ObjectId, required: true, ref: "Route" },
     driver: { type: Schema.Types.ObjectId, ref: "Driver" },
     availableSeats: { type: Number },
+    seats: [],
     title: { type: String },
     time: { type: String },
     status: { type: String, default: 'pending' },

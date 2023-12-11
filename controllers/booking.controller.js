@@ -33,7 +33,8 @@ export const createBooking = async (req, res) => {
     console.log(emergency);
 
     let trip = await Trip.findById(req.body.trip)
-
+    let returntrip = await Trip.findById(req.body.returnTrip)
+    console.log(returntrip);
     for await (const it of passengers) {
       
     const newBooking = new Booking({
@@ -54,12 +55,22 @@ export const createBooking = async (req, res) => {
       emergencyEmail: emergency.email,
       emergencyPhone: emergency.phone,
       trip: req.body.trip,
+      returnTrip: req.body.returntrip,
       status: req.body.status,
+      tripSeat: it.tripSeat,
+      returnSeat: it.returnSeat
+
     });
     await newBooking.save();
     trip.availableSeats = trip.availableSeats - 1
-    
+    trip.seats.push(it.tripSeat)
     trip.save();
+
+    if(returntrip){
+      returntrip.availableSeats = returntrip.availableSeats - 1
+      returntrip.seats.push(it.returnSeat)
+      returntrip.save();
+    }
     
   }
 
