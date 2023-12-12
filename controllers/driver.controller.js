@@ -8,7 +8,7 @@ import Driver from '../models/drivers.model.js';
 // Create a new Driver
 export const fetchDrivers = async (req, res) => {
   try {
-    const result =   await Driver.find({});
+    const result =   await Driver.find({}).sort({createdAt:-1});;
     res.status(201).json({success:true, data: result});
   } catch (err) {
     res.status(500).json({ error: err.message });

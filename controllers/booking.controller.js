@@ -9,7 +9,7 @@ import Trip from '../models/trips.model.js';
 // Create a new Booking
 export const fetchBookings = async (req, res) => {
   try {
-    const result =   await Booking.find({}).populate('trip');
+    const result =   await Booking.find({}).populate('trip').sort({createdAt:-1});
     res.status(201).json({success:true, data: result});
   } catch (err) {
     res.status(500).json({ error: err.message });

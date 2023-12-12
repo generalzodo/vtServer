@@ -8,7 +8,7 @@ import Location from '../models/location.model.js';
 // Create a new Location
 export const fetchLocations = async (req, res) => {
   try {
-    const result =  await Location.find({});
+    const result =  await Location.find({}).sort({createdAt:-1});;
     res.status(201).json({success:true, data: result});
   } catch (err) {
     res.status(500).json({ error: err.message });

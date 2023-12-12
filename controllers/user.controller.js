@@ -1,7 +1,7 @@
 import User from '../models/users.model.js';
 import bcrypt from "bcrypt";
 // import jwt from 'jsonwebtoken'
-// import mail from '../../mail.js';
+import mail from './../mail.js';
 
 /**
  * Create a new User item.
@@ -12,7 +12,7 @@ import bcrypt from "bcrypt";
 // Create a new User
 export const fetchUsers = async (req, res) => {
   try {
-    const result =   await User.find({});
+    const result =   await User.find({}).sort({createdAt:-1});;
     res.status(201).json({success:true, data: result});
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -46,7 +46,19 @@ export const createUser = async (req, res) => {
 
     });
 
+    var chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    var token = '';
+    for (var i = 16; i > 0; --i) {
+        token += chars[Math.round(Math.random() * (chars.length - 1))];
+    }
+    newUser.reset = token;
+    newUser.resetExpires = Date.now() + 7200000;
     const result = await newUser.save();
+
+    let link = process.env.BASIC_URL + 'verify/' + token
+
+    await mail.new(newUser.email, link);
+
     res.status(201).json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });

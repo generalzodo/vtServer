@@ -8,7 +8,7 @@ import Bus from '../models/bus.model.js';
 // Create a new Bus
 export const fetchBuses = async (req, res) => {
   try {
-    const result =   await Bus.find({});
+    const result =   await Bus.find({}).sort({createdAt:-1});;
     res.status(201).json({success:true, data: result});
   } catch (err) {
     res.status(500).json({ error: err.message });
