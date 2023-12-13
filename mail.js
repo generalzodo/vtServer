@@ -39,7 +39,7 @@ exports.new =  async function (email, link) {
 
     // Define email options
     const mailOptions = {
-        from: 'info@victoriatravels.org',
+        from: 'Victoria Travels info@victoriatravels.org',
         to: email,
         subject: 'Confirm your email address - Victoria Travels',
         html: personalizedTemplate,

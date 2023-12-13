@@ -24,6 +24,14 @@ export const fetchSingleBooking = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+export const fetchUserBooking = async (req, res) => {
+  try {
+    const result =   await Booking.find({ user: req.params.id }).populate('trip').sort({createdAt:-1});
+    res.status(201).json({success:true, data: result});
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
 
 export const createBooking = async (req, res) => {
   try {
@@ -55,11 +63,11 @@ export const createBooking = async (req, res) => {
       emergencyEmail: emergency.email,
       emergencyPhone: emergency.phone,
       trip: req.body.trip,
-      returnTrip: req.body.returntrip,
+      returnTrip: req.body.returnTrip,
       status: req.body.status,
       tripSeat: it.tripSeat,
-      returnSeat: it.returnSeat
-
+      returnSeat: it.returnSeat,
+      user: req.body.user
     });
     await newBooking.save();
     trip.availableSeats = trip.availableSeats - 1

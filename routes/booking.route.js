@@ -1,5 +1,5 @@
 import express from 'express';
-import { createBooking, deleteBooking, fetchSingleBooking, fetchBookings, updateBooking } from '../controllers/booking.controller.js';
+import { createBooking, deleteBooking, fetchSingleBooking,fetchUserBooking, fetchBookings, updateBooking } from '../controllers/booking.controller.js';
 
 const router = express.Router();
 /**
@@ -40,6 +40,7 @@ router.post('/', createBooking);
 router.patch('/:id', updateBooking);
 router.get('/', fetchBookings);
 router.get('/:id', fetchSingleBooking);
+router.get('/user/:id', fetchUserBooking);
 router.delete('/:id', deleteBooking);
 
 // Define other routes for reading, updating, and deleting Bookings
