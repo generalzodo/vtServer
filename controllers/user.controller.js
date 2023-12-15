@@ -39,7 +39,7 @@ export const createUser = async (req, res) => {
       phone: req.body.phone,
       dob: req.body.dob,
       email: req.body.email,
-      // address: req.body.address,
+      address: req.body.address,
       state: req.body.state,
       password: hash,
       uuid: generateUserId()
@@ -59,6 +59,25 @@ export const createUser = async (req, res) => {
 
     await mail.new(newUser.email, link);
 
+    res.status(201).json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+export const changePassword = async (req, res) => {
+  try {
+  const salt = await bcrypt.genSalt(10);
+  const hash = await bcrypt.hash(req.body.password, salt);
+  const user = await User.findById(req.params.id);
+
+  const valid = await bcrypt.compare(req.body.opassword, user.password)
+  if (!valid) {
+    throw new Error('Invalid password')
+  }
+  
+  const result = await User.updateOne({ _id: req.params.id }, {password: hash });
+   
     res.status(201).json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -136,7 +155,8 @@ export const updateUser = async (req, res) => {
   }
   try {
     const result = await User.updateOne({ _id: req.params.id }, { ...req.body });
-    res.status(201).json(result);
+    const user = await User.findById(req.params.id);
+    res.status(201).json(user);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

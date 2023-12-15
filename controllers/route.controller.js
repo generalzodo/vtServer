@@ -65,6 +65,8 @@ export const createRoute = async (req, res) => {
       origin: req.body.origin,
       bus: req.body.bus,
       price: req.body.price,
+      premiumPrice: req.body.premiumPrice,
+      discountedPrice: req.body.discountedPrice,
       destination: req.body.destination,
       recurrentDays: req.body.recurrentDays,
       totalTrips: req.body.totalTrips,

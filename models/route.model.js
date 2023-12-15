@@ -7,6 +7,8 @@ const routeSchema = new mongoose.Schema({
     destination: { type: String },
     origin: { type: String },
     price: { type: Number },
+    premiumPrice: { type: Number },
+    discountedPrice: { type: Number },
     recurrentDays:[],
     totalTrips: {type: Number} ,
     totalTrips: {type: Number} ,
