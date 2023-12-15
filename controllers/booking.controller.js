@@ -36,7 +36,6 @@ export const fetchUserBooking = async (req, res) => {
 export const createBooking = async (req, res) => {
   try {
     let passengers = req.body.data.passengers;
-    let emergency = req.body.data.emergencyContact
     let bookingId =generateBookingId();
     console.log(emergency);
 
@@ -44,6 +43,7 @@ export const createBooking = async (req, res) => {
     let returntrip = await Trip.findById(req.body.returnTrip)
     console.log(returntrip);
     for await (const it of passengers) {
+    let emergency = it.emergencyContact
       
     const newBooking = new Booking({
 
