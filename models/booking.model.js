@@ -17,7 +17,7 @@ const bookingSchema = new mongoose.Schema({
     uniqueBookingId:{ type: String, required: true }, 
     emergencyFirstName:{ type: String, required: true }, 
     emergencyLastName:{ type: String, required: true }, 
-    emergencyEmail:{ type: String, required: true }, 
+    emergencyEmail:{ type: String}, 
     emergencyPhone:{ type: String, required: true }, 
     type: {type:String},
     tripSeat: {type:String},
