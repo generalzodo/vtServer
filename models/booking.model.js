@@ -10,6 +10,8 @@ const bookingSchema = new mongoose.Schema({
     dob: { type: String, required: true },
     gender: { type: String, required: true },
     amount: { type: Number, required: true },
+    tripAmount: { type: Number },
+    returnAmount: { type: Number },
     paystack_ref: { type: String, required: true },
     bookingId:{ type: String, required: true }, 
     uniqueBookingId:{ type: String, required: true }, 

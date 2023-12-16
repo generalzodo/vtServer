@@ -9,8 +9,8 @@ import Trip from '../models/trips.model.js';
 // Create a new Booking
 export const fetchBookings = async (req, res) => {
   try {
-    const result =   await Booking.find({}).populate('trip').sort({createdAt:-1});
-    res.status(201).json({success:true, data: result});
+    const result = await Booking.find({}).populate('trip').sort({ createdAt: -1 });
+    res.status(201).json({ success: true, data: result });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -18,7 +18,7 @@ export const fetchBookings = async (req, res) => {
 
 export const fetchSingleBooking = async (req, res) => {
   try {
-    const result =   Booking.findOne({ _id: req.params.id });
+    const result = Booking.findOne({ _id: req.params.id });
     res.status(201).json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -26,8 +26,8 @@ export const fetchSingleBooking = async (req, res) => {
 };
 export const fetchUserBooking = async (req, res) => {
   try {
-    const result =   await Booking.find({ user: req.params.id }).populate('trip').sort({createdAt:-1});
-    res.status(201).json({success:true, data: result});
+    const result = await Booking.find({ user: req.params.id }).populate('trip').sort({ createdAt: -1 });
+    res.status(201).json({ success: true, data: result });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -36,53 +36,54 @@ export const fetchUserBooking = async (req, res) => {
 export const createBooking = async (req, res) => {
   try {
     let passengers = req.body.data.passengers;
-    let bookingId =generateBookingId();
-    console.log(emergency);
+    let bookingId = generateBookingId();
 
     let trip = await Trip.findById(req.body.trip)
     let returntrip = await Trip.findById(req.body.returnTrip)
     console.log(returntrip);
     for await (const it of passengers) {
-    let emergency = it.emergencyContact
-      
-    const newBooking = new Booking({
+      let emergency = it.emergencyContact
 
-      firstName: it.firstName,
-      middleName: it.middleName,
-      lastName: it.lastName,
-      phone: it.phone,
-      email: it.email,
-      dob: it.dob,
-      gender: it.gender.title,
-      amount: req.body.amount,
+      const newBooking = new Booking({
+
+        firstName: it.firstName,
+        middleName: it.middleName,
+        lastName: it.lastName,
+        phone: it.phone,
+        email: it.email,
+        dob: it.dob,
+        gender: it.gender.title,
+        amount: req.body.amount,
+        tripAmount: it.tripAmount,
+        returnAmount: it.returnAmount,
       paystack_ref: req.body.trans_ref,
-      bookingId: 'T'+ bookingId,
-      uniqueBookingId: 'T'+generateBookingId(),
-      emergencyFirstName: emergency.firstName,
-      emergencyLastName: emergency.lastName,
-      emergencyEmail: emergency.email,
-      emergencyPhone: emergency.phone,
-      trip: req.body.trip,
-      returnTrip: req.body.returnTrip,
-      status: req.body.status,
-      tripSeat: it.tripSeat,
-      returnSeat: it.returnSeat,
-      user: req.body.user
-    });
-    await newBooking.save();
-    trip.availableSeats = trip.availableSeats - 1
-    trip.seats.push(it.tripSeat)
-    trip.save();
+        bookingId: 'T' + bookingId,
+        uniqueBookingId: 'T' + generateBookingId(),
+        emergencyFirstName: emergency.firstName,
+        emergencyLastName: emergency.lastName,
+        emergencyEmail: emergency.email,
+        emergencyPhone: emergency.phone,
+        trip: req.body.trip,
+        returnTrip: req.body.returnTrip,
+        status: req.body.status,
+        tripSeat: it.tripSeat,
+        returnSeat: it.returnSeat,
+        user: req.body.user
+      });
+      await newBooking.save();
+      trip.availableSeats = trip.availableSeats - 1
+      trip.seats.push(it.tripSeat)
+      trip.save();
 
-    if(returntrip){
-      returntrip.availableSeats = returntrip.availableSeats - 1
-      returntrip.seats.push(it.returnSeat)
-      returntrip.save();
+      if (returntrip) {
+        returntrip.availableSeats = returntrip.availableSeats - 1
+        returntrip.seats.push(it.returnSeat)
+        returntrip.save();
+      }
+
     }
-    
-  }
 
-    const result = {status: 'success', data: 'T'+ bookingId}
+    const result = { status: 'success', data: 'T' + bookingId }
     res.status(201).json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -119,7 +120,7 @@ export const updateBooking = async (req, res) => {
 
 export const deleteBooking = async (req, res) => {
   try {
-    const result =  await Booking.deleteOne({ _id: req.params.id })
+    const result = await Booking.deleteOne({ _id: req.params.id })
     res.status(201).json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
