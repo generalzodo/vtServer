@@ -56,7 +56,7 @@ export const createBooking = async (req, res) => {
         amount: req.body.amount,
         tripAmount: it.tripAmount,
         returnAmount: it.returnAmount,
-      paystack_ref: req.body.trans_ref,
+        paystack_ref: req.body.trans_ref,
         bookingId: 'T' + bookingId,
         uniqueBookingId: 'T' + generateBookingId(),
         emergencyFirstName: emergency.firstName,
@@ -73,12 +73,12 @@ export const createBooking = async (req, res) => {
       await newBooking.save();
       trip.availableSeats = trip.availableSeats - 1
       trip.seats.push(it.tripSeat)
-      trip.save();
+      await trip.save();
 
       if (returntrip) {
         returntrip.availableSeats = returntrip.availableSeats - 1
         returntrip.seats.push(it.returnSeat)
-        returntrip.save();
+        await returntrip.save();
       }
 
     }
