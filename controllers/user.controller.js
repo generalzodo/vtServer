@@ -33,6 +33,12 @@ export const createUser = async (req, res) => {
   const salt = await bcrypt.genSalt(10);
   const hash = await bcrypt.hash(req.body.password, salt);
 
+  const emailExists = await User.findOne({ email: req.body.email });
+
+  if (emailExists) {
+    throw Error("Email already in use");
+  }
+
     const newUser = new User({
       firstName: req.body.firstName,
       lastName: req.body.lastName,
@@ -56,10 +62,29 @@ export const createUser = async (req, res) => {
     const result = await newUser.save();
 
     let link = process.env.BASIC_URL + 'verify/' + token
-
+    console.log(link);
     await mail.new(newUser.email, link);
 
     res.status(201).json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+export const verifyEmail = async (req, res) => {
+  try {
+    const user =   await User.findOne({reset: req.params.token});
+    console.log(user);
+    if (!user){
+      throw new Error("Email Verification token is invalid or expired");
+    }
+    user.status = 'active'
+    user.reset = null;
+    user.resetExpires = null;
+
+    await user.save();
+
+    res.status(201).json({success:true});
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -94,10 +119,10 @@ export const loginUser = async (req, res) => {
     if (!user) {
       throw new Error('No such user found')
     }
-    if (user.status == 'Locked') {
+    if (user.status == 'locked') {
       throw new Error('You have been locked out of this system. please contact the adminstrator')
     }
-    if (user.status == 'Inactive') {
+    if (user.status == 'inactive') {
       throw new Error('Kindly verify your email used during sign up to gain access')
     }
     // 2

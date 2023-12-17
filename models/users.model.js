@@ -28,6 +28,9 @@ const userSchema = new Schema({
   reset: {
     type: String,
   },
+  resetExpires:{
+    type: String
+  },
   bank_name: {
     type: String,
   },
@@ -63,7 +66,7 @@ const userSchema = new Schema({
 
   status: {
     type: String,
-    default: 'Active'
+    default: 'inactive'
   }
 
 }, {

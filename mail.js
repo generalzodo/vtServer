@@ -35,7 +35,7 @@ exports.new =  async function (email, link) {
     const htmlTemplate = await readHTMLTemplate('./templates/verify/verify-email.html');
 
     // Replace placeholders in the template
-    const personalizedTemplate = htmlTemplate.replace('{{link}}', 'link');
+    const personalizedTemplate = htmlTemplate.replace('{{link}}', link);
 
     // Define email options
     const mailOptions = {
