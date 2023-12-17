@@ -18,8 +18,9 @@ export const fetchBookings = async (req, res) => {
 
 export const fetchSingleBooking = async (req, res) => {
   try {
-    const result = Booking.findOne({ _id: req.params.id });
-    res.status(201).json(result);
+    const result = await Booking.findOne({ bookingId: req.params.id }).populate('trip').populate('returnTrip');
+    console.log(result)
+    res.status(201).json({data:result});
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
