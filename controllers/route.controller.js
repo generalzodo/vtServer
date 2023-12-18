@@ -30,6 +30,7 @@ export const findRoutes = async (req, res) => {
     const startDate = new Date(searchDate);
     const endDate = new Date(searchDate);
     endDate.setHours(23, 59, 59, 999);
+    console.log(startDate, endDate);
     let arr = []
     const result = await Route.find({ origin: req.body.from, destination: req.body.to }).populate({ path: 'bus' });
     for await (const item of result) {

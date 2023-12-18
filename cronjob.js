@@ -40,7 +40,7 @@ const yourTask = async () => {
   const cronJob = new CronJob('0 0 * * 3', yourTask);
 
   // Start the cron job
-  cronJob.start();
+  // cronJob.start();
 
   // Log when the cron job is started
   console.log('Cron job scheduled to run on Wednesday at midnight.');
@@ -53,11 +53,11 @@ const yourTask = async () => {
 
     // Find the next Sunday
     const nextSunday = new Date(currentDate);
-    nextSunday.setDate(currentDate.getDate() + (7 - currentDate.getDay()));
+    // nextSunday.setDate(currentDate.getDate() + (7 - currentDate.getDay()));
 
     // Generate an array of objects where each object has a 'day' and 'date' property
     const datesArray = [];
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < 30; i++) {
       const currentDate = new Date(nextSunday);
       currentDate.setDate(nextSunday.getDate() + i);
 
