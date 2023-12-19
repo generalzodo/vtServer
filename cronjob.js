@@ -35,7 +35,10 @@ const yourTask = async () => {
     };
   }
 }
+setTimeout(() => {
+  
   // yourTask()
+}, 3000);
   // Define the cron schedule (every Wednesday at midnight)
   const cronJob = new CronJob('0 0 * * 3', yourTask);
 
@@ -57,7 +60,7 @@ const yourTask = async () => {
 
     // Generate an array of objects where each object has a 'day' and 'date' property
     const datesArray = [];
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; i < 6; i++) {
       const currentDate = new Date(nextSunday);
       currentDate.setDate(nextSunday.getDate() + i);
 
