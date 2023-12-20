@@ -9,7 +9,8 @@ import Route from '../models/route.model.js';
 // Create a new Trip
 export const fetchTrips = async (req, res) => {
   try {
-    const result =   await Trip.find({}).populate({path: 'route'}).populate({path: 'driver'}).sort({tripDate: 1});
+    const result =   await Trip.find({}).populate({path: 'route'}).populate({path: 'driver'}).sort({tripDate: 
+      1});
     res.status(201).json({success:true, data: result});
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -86,7 +87,7 @@ export const updateTrip = async (req, res) => {
 
 export const deleteTrip = async (req, res) => {
   try {
-    const result =  await Trip.deleteOne({ _id: req.params.id })
+    const result =  await Trip.deleteOne({ id: req.params.id })
     res.status(201).json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
