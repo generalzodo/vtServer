@@ -10,7 +10,7 @@ const routeSchema = new mongoose.Schema({
     premiumPrice: { type: Number, default: 12000 },
     discountedPrice: { type: Number, default: 500 },
     recurrentDays:[],
-    totalTrips: {type: Number} ,
+    times:[],
     totalTrips: {type: Number} ,
     createdAt: { type: Date, default: Date.now }
 });
