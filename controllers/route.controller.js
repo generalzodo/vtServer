@@ -22,7 +22,7 @@ export const findRoutes = async (req, res) => {
   try {
     console.log(req.body)
     const searchDate = new Date(req.body.date);
-
+    console.log(searchDate);
     // Set the time to the start of the day (midnight)
     searchDate.setHours(0, 0, 0, 0);
 
