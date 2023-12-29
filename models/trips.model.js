@@ -10,7 +10,7 @@ const tripSchema = new mongoose.Schema({
     title: { type: String },
     time: { type: String },
     status: { type: String, default: 'pending' },
-    tripDate: { type: Date},
+    tripDate: { type: String},
     createdAt: { type: Date, default: Date.now }
 });
 
