@@ -10,8 +10,8 @@ const bookingSchema = new mongoose.Schema({
     dob: { type: String },
     gender: { type: String, required: true },
     amount: { type: Number, required: true },
-    tripAmount: { type: Number },
-    returnAmount: { type: Number },
+    tripAmount: { type: Number, default: 0 },
+    returnAmount: { type: Number, default: 0 },
     paystack_ref: { type: String, required: true },
     bookingId:{ type: String, required: true }, 
     uniqueBookingId:{ type: String, required: true }, 
@@ -26,7 +26,8 @@ const bookingSchema = new mongoose.Schema({
     trip: { type: Schema.Types.ObjectId, required: true, ref: "Trip" },
     user: { type: Schema.Types.ObjectId,  ref: "User" },
     returnTrip: { type: Schema.Types.ObjectId, ref: "Trip" },
-    status: { type: String, default: 'Active' },
+    status: { type: String, default: 'Pending' },
+    paymentStatus: { type: String },
     createdAt: { type: Date, default: Date.now },
 });
 

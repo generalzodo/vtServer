@@ -119,6 +119,19 @@ export const updateBooking = async (req, res) => {
   }
 };
 
+export const cancelBooking = async (req, res) => {
+  try {
+    const booking = await Booking.findOne({ _id: req.params.id })
+    if(booking.status == 'Used'){
+    throw new Error('this ticket has already been used')
+
+    }
+    res.status(201).json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 export const deleteBooking = async (req, res) => {
   try {
     const result = await Booking.deleteOne({ _id: req.params.id })

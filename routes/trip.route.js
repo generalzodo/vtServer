@@ -1,5 +1,5 @@
 import express from 'express';
-import { createTrip, deleteTrip, fetchSingleTrip, fetchTrips, updateTrip } from '../controllers/trips.controller.js';
+import { createTrip, deleteTrip, fetchSingleTrip, fetchTrips, updateTrip, deleteMultiTrip } from '../controllers/trips.controller.js';
 
 const router = express.Router();
 /**
@@ -37,6 +37,7 @@ const router = express.Router();
  */
 // Create a new Trip item
 router.post('/', createTrip);
+router.post('/deleteTrips', deleteMultiTrip);
 router.patch('/:id', updateTrip);
 router.get('/', fetchTrips);
 router.get('/:id', fetchSingleTrip);

@@ -20,24 +20,12 @@ export const fetchRoutes = async (req, res) => {
 export const findRoutes = async (req, res) => {
 
   try {
-    console.log(req.body)
-    const searchDate = new Date(req.body.date);
-    console.log(searchDate);
-    // Set the time to the start of the day (midnight)
-    searchDate.setHours(0, 0, 0, 0);
-
-    // Create a date range covering the entire day
-    const startDate = new Date(searchDate);
-    const endDate = new Date(searchDate);
-    endDate.setHours(23, 59, 59, 999);
-    console.log(startDate, endDate);
+   
     let arr = []
     const result = await Route.find({ origin: req.body.from, destination: req.body.to }).populate({ path: 'bus' });
     for await (const item of result) {
-      let trips = await Trip.find({ route: item._id, tripDate: {
-        $gte: startDate,
-        $lte: endDate
-      }, status: 'pending' });
+      console.log(req.body.date);
+      let trips = await Trip.find({ route: item._id, tripDate: req.body.date, status: 'pending' });
       item.trips = trips;
       arr.push({ trips: trips, route: item })
     }

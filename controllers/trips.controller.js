@@ -87,7 +87,16 @@ export const updateTrip = async (req, res) => {
 
 export const deleteTrip = async (req, res) => {
   try {
-    const result =  await Trip.deleteOne({ _id: req.params.id })
+    const result =  await Trip.deleteOne({_id: req.params.id })
+    res.status(201).json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+export const deleteMultiTrip = async (req, res) => {
+  try {
+    console.log(req.body.ids);
+    const result =  await Trip.deleteMany({ _id: { $in: req.body.ids} })
     res.status(201).json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });

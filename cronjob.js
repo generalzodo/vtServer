@@ -9,7 +9,6 @@ const yourTask = async () => {
   console.log('Cron job is running on Wednesday!');
   // Add your logic or call your function here
   let days = getDays()
-  let time = ['6am', '7:30am', '8:30am']
   for await (const day of days) {
 
     let routes = await Route.find({recurrentDays: day.day}).populate({path: 'bus'});
@@ -26,7 +25,7 @@ const yourTask = async () => {
           route: route._id,
           availableSeats: route.bus.seats,
           tripDate: day.date,
-          time: time[index]
+          time: route.times[index]
         }); 
         newTrip.save()
         console.log(newTrip);
@@ -35,10 +34,10 @@ const yourTask = async () => {
     };
   }
 }
-setTimeout(() => {
+// setTimeout(() => {
   
   // yourTask()
-}, 3000);
+// }, 3000);
   // Define the cron schedule (every Wednesday at midnight)
   const cronJob = new CronJob('0 0 * * 3', yourTask);
 
@@ -65,7 +64,7 @@ setTimeout(() => {
       currentDate.setDate(nextSunday.getDate() + i);
 
       const dayName = daysOfWeek[currentDate.getDay()];
-      const dateString = currentDate.toISOString().split('T')[0];
+      const dateString = formatDate(currentDate);
 
       // Push an object with 'day' and 'date' properties into the array
       datesArray.push({ day: dayName, date: dateString });
@@ -74,3 +73,18 @@ setTimeout(() => {
     console.log(datesArray);
     return datesArray
   }
+
+ function formatDate(date) {
+    // Function to add leading zeros to single-digit numbers
+    function addLeadingZero(number) {
+        return number < 10 ? "0" + number : number;
+    }
+
+    // Format the date as dd-mm-yyyy
+    var formattedDate =
+        addLeadingZero(date.getDate()) + "-" +
+        addLeadingZero(date.getMonth() + 1) + "-" +
+        date.getFullYear();
+
+    return formattedDate;
+}
