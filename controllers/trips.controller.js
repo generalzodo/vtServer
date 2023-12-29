@@ -9,8 +9,7 @@ import Route from '../models/route.model.js';
 // Create a new Trip
 export const fetchTrips = async (req, res) => {
   try {
-    const result =   await Trip.find({}).populate({path: 'route'}).populate({path: 'driver'}).sort({tripDate: 
-      1});
+    const result =   await Trip.find({}).populate({path: 'route'}).populate({path: 'driver'}).sort({createdAt:-1});
     res.status(201).json({success:true, data: result});
   } catch (err) {
     res.status(500).json({ error: err.message });
