@@ -34,9 +34,9 @@ const yourTask = async () => {
     };
   }
 }
-// setTimeout(() => {
+ setTimeout(() => {
   
-//   yourTask()
+   yourTask()
 // }, 3000);
   // Define the cron schedule (every Wednesday at midnight)
   const cronJob = new CronJob('0 0 * * 3', yourTask);
