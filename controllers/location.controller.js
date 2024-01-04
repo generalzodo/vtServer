@@ -42,6 +42,7 @@ export const createLocation = async (req, res) => {
 };
 
 export const updateLocation = async (req, res) => {
+  try {
 
   let isError = { error: false, message: "" };
   for (const key in req.body) {
@@ -61,7 +62,6 @@ export const updateLocation = async (req, res) => {
     throw new Error('Something went wrong, pls try again later')
 
   }
-  try {
     const result = await Location.updateOne({ _id: req.params.id }, { ...req.body });
     res.status(201).json({success:true, data: result});
   } catch (err) {

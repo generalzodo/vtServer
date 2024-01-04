@@ -20,7 +20,7 @@ export const fetchSingleBooking = async (req, res) => {
   try {
     const result = await Booking.findOne({ bookingId: req.params.id }).populate('trip').populate('returnTrip');
     console.log(result)
-    res.status(201).json({data:result});
+    res.status(201).json({ data: result });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -92,6 +92,7 @@ export const createBooking = async (req, res) => {
 };
 
 export const updateBooking = async (req, res) => {
+  try {
 
   let isError = { error: false, message: "" };
   for (const key in req.body) {
@@ -111,7 +112,6 @@ export const updateBooking = async (req, res) => {
     throw new Error('Something went wrong, pls try again later')
 
   }
-  try {
     const result = await Booking.updateOne({ _id: req.params.id }, { ...req.body });
     res.status(201).json(result);
   } catch (err) {
@@ -122,11 +122,11 @@ export const updateBooking = async (req, res) => {
 export const cancelBooking = async (req, res) => {
   try {
     const booking = await Booking.findOne({ _id: req.params.id })
-    if(booking.status == 'Used'){
-    throw new Error('this ticket has already been used')
-
+    if (booking.status == 'Used') {
+      throw new Error('this ticket has already been used')
     }
-    res.status(201).json(result);
+
+    res.status(201).json(booking, );
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -143,7 +143,7 @@ export const deleteBooking = async (req, res) => {
 
 function generateBookingId() {
   const timestamp = new Date().getTime(); // Get current timestamp
-  const randomPart = Math.floor(Math.random() * 1000); // Add a random number for extra uniqueness
+  const randomPart = Math.floor(Math.random() * 10); // Add a random number for extra uniqueness
 
   // Combine timestamp and random number
   const bookingId = `${timestamp}${randomPart}`;

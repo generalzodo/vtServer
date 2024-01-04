@@ -44,6 +44,7 @@ export const createDriver = async (req, res) => {
 };
 
 export const updateDriver = async (req, res) => {
+  try {
 
   let isError = { error: false, message: "" };
   for (const key in req.body) {
@@ -63,7 +64,6 @@ export const updateDriver = async (req, res) => {
     throw new Error('Something went wrong, pls try again later')
 
   }
-  try {
     const result = await Driver.updateOne({ _id: req.params.id }, { ...req.body });
     res.status(201).json(result);
   } catch (err) {

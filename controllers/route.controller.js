@@ -70,6 +70,7 @@ export const createRoute = async (req, res) => {
 };
 
 export const updateRoute = async (req, res) => {
+  try {
 
   let isError = { error: false, message: "" };
   for (const key in req.body) {
@@ -89,7 +90,6 @@ export const updateRoute = async (req, res) => {
     throw new Error('Something went wrong, pls try again later')
 
   }
-  try {
     const result = await Route.updateOne({ _id: req.params.id }, { ...req.body });
     res.status(201).json({ success: true, data: result });
   } catch (err) {

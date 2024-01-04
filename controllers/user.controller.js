@@ -159,6 +159,7 @@ export const loginUser = async (req, res) => {
 };
 
 export const updateUser = async (req, res) => {
+  try {
 
   let isError = { error: false, message: "" };
   for (const key in req.body) {
@@ -178,7 +179,6 @@ export const updateUser = async (req, res) => {
     throw new Error('Something went wrong, pls try again later')
 
   }
-  try {
     const result = await User.updateOne({ _id: req.params.id }, { ...req.body });
     const user = await User.findById(req.params.id);
     res.status(201).json(user);

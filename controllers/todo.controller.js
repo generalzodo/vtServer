@@ -39,6 +39,7 @@ export const createTodo = async (req, res) => {
 };
 
 export const updateTodo = async (req, res) => {
+  try {
 
   let isError = { error: false, message: "" };
   for (const key in req.body) {
@@ -58,7 +59,6 @@ export const updateTodo = async (req, res) => {
     throw new Error('Something went wrong, pls try again later')
 
   }
-  try {
     const result = await Todo.updateOne({ _id: req.params._id }, { ...req.body });
     res.status(201).json(result);
   } catch (err) {
