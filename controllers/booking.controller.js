@@ -25,6 +25,15 @@ export const fetchSingleBooking = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+export const fetchAllBooking = async (req, res) => {
+  try {
+    const result = await Booking.find({ bookingId: req.params.id }).populate('trip').populate('returnTrip');
+    console.log(result)
+    res.status(201).json({ data: result });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
 export const fetchUserBooking = async (req, res) => {
   try {
     const result = await Booking.find({ user: req.params.id }).populate('trip').sort({ createdAt: -1 });
