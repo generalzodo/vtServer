@@ -21,7 +21,8 @@ const yourTask = async () => {
 
         const newTrip = new Trip({
 
-          title: route.title +' '+(index+1),
+          // title: route.title +' '+(index+1),
+          title: route.title,
           route: route._id,
           availableSeats: route.bus.seats,
           tripDate: day.date,
