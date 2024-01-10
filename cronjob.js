@@ -23,6 +23,7 @@ const yourTask = async () => {
 
           // title: route.title +' '+(index+1),
           title: route.title,
+          bus: route.bus.title,
           route: route._id,
           availableSeats: route.bus.seats,
           tripDate: day.date,

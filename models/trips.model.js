@@ -8,6 +8,7 @@ const tripSchema = new mongoose.Schema({
     availableSeats: { type: Number },
     seats: [],
     title: { type: String },
+    bus: { type: String },
     time: { type: String },
     status: { type: String, default: 'pending' },
     tripDate: { type: String},

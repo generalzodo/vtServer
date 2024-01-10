@@ -23,6 +23,7 @@ const bookingSchema = new mongoose.Schema({
     tripSeat: {type:String},
     returnSeat: {type:String},
     category: {type: String},
+    bus: {type: String},
     trip: { type: Schema.Types.ObjectId, required: true, ref: "Trip" },
     user: { type: Schema.Types.ObjectId,  ref: "User" },
     returnTrip: { type: Schema.Types.ObjectId, ref: "Trip" },
