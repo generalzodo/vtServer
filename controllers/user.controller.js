@@ -47,6 +47,7 @@ export const createUser = async (req, res) => {
       email: req.body.email,
       address: req.body.address,
       state: req.body.state,
+      type: req.body.userType,
       password: hash,
       uuid: generateUserId()
 

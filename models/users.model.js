@@ -3,10 +3,7 @@ import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-  userType: {
-    type: String,
-    default: "User"
-  },
+
   wallet_balance: {
     type: String,
     default: "0"
@@ -23,6 +20,7 @@ const userSchema = new Schema({
 
   email: {
     type: String,
+    unique: true
   },
 
   phone: {
