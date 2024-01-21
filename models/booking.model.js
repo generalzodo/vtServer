@@ -12,7 +12,7 @@ const bookingSchema = new mongoose.Schema({
     amount: { type: Number, required: true },
     tripAmount: { type: Number, default: 0 },
     returnAmount: { type: Number, default: 0 },
-    paystack_ref: { type: String, required: true },
+    paystack_ref: { type: String,  },
     bookingId:{ type: String, required: true }, 
     uniqueBookingId:{ type: String, required: true }, 
     emergencyFirstName:{ type: String, required: true }, 
