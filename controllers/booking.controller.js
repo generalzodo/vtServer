@@ -78,7 +78,8 @@ export const createBooking = async (req, res) => {
         status: req.body.status,
         tripSeat: it.tripSeat,
         returnSeat: it.returnSeat,
-        user: req.body.user
+        user: req.body.user,
+        paymentStatus: 'pending'
       });
       await newBooking.save();
       trip.availableSeats = trip.availableSeats - 1
