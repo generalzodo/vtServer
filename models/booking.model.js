@@ -29,7 +29,7 @@ const bookingSchema = new mongoose.Schema({
     returnTrip: { type: Schema.Types.ObjectId, ref: "Trip" },
     status: { type: String, default: 'Pending' },
     mode: { type: String, default: 'Paystack' },
-    paymentStatus: { type: String, default: 'pending' },
+    paymentStatus: { type: String, default: 'success' },
     createdAt: { type: Date, default: Date.now },
 });
 
