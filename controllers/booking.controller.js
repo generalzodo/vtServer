@@ -121,7 +121,7 @@ export const updateBooking = async (req, res) => {
     throw new Error('Something went wrong, pls try again later')
 
   }
-    const result = await Booking.updateOne({ _id: req.params.id }, { ...req.body });
+    const result = await Booking.updateMany({ bookingId: req.params.id }, { ...req.body });
     res.status(201).json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });

@@ -60,6 +60,7 @@ export const createRoute = async (req, res) => {
       destination: req.body.destination,
       recurrentDays: req.body.recurrentDays,
       totalTrips: req.body.totalTrips,
+      stops: req.body.stops,
     });
 
     const result = await newRoute.save();
