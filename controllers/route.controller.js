@@ -22,7 +22,7 @@ export const findRoutes = async (req, res) => {
   try {
    
     let arr = []
-    const result = await Route.find({ origin: req.body.from, destination: req.body.to }).populate({ path: 'bus' });
+    const result = await Route.find({ origin: req.body.from, stops: { $in: req.body.to } }).populate({ path: 'bus' });
     for await (const item of result) {
       console.log(req.body.date);
       let trips = await Trip.find({ route: item._id, tripDate: req.body.date, status: 'pending' });
