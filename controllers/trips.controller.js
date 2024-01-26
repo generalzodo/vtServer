@@ -42,7 +42,7 @@ export const findTrips = async (req, res) => {
 export const fetchSingleTrip = async (req, res) => {
   try {
     const result = Trip.findOne({ _id: req.params.id }).populate({ path: 'route' }).populate({ path: 'driver' });
-    res.status(201).json(result);
+    res.status(201).json({ success: true, data: result });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
