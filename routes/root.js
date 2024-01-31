@@ -2,6 +2,7 @@
 
 import { Router } from "express";
 import RouteRouter from "./route.route.js";
+import SubRouteRouter from "./subroute.route.js";
 import LocationRouter from "./location.route.js";
 import DriverRouter from "./driver.route.js";
 import BookingRouter from "./booking.route.js";
@@ -21,6 +22,7 @@ router.get("/", (req, res) => {
 // router.use("/auth", AuthRouter);
 router.use("/users", UserRouter);
 router.use("/routes", RouteRouter);
+router.use("/subroutes", SubRouteRouter);
 router.use("/locations", LocationRouter);
 router.use("/booking", BookingRouter);
 router.use("/drivers", DriverRouter);

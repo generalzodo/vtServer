@@ -36,12 +36,35 @@ const yourTask = async () => {
     };
   }
 }
+
+const checkforPendingOrders = async() =>{
+  //check orderNo with paystack
+}
+const checkTripToConfirmMovement = async() =>{
+  const currentDateTime = getCurrentDate();
+  
+  let trips =  await Trip.find({status: 'pending', tripDate: currentDateTime
+   
+  })
+
+  for await (const it of trips) {
+    if(hasTimePassed(it.time)){
+      it.status = 'completed';
+      console.log(it);
+      it.save();
+    }
+  }
+
+  console.log(trips.length);
+  
+  //check orderNo with paystack
+}
+// checkTripToConfirmMovement();
 // setTimeout(() => {
   
 //   yourTask()
 // }, 3000);
   // Define the cron schedule (every Wednesday at midnight)
-  const cronJob = new CronJob('0 0 * * 3', yourTask);
 
   // Start the cron job
   // cronJob.start();
@@ -90,3 +113,34 @@ const yourTask = async () => {
 
     return formattedDate;
 }
+
+function hasTimePassed(targetTime) {
+  const now = new Date();
+  
+  // Parse the target time string to create a Date object
+  const targetDate = new Date(`${now.toDateString()} ${targetTime}`);
+  
+  // Add 5 minutes to the target time
+  const targetTimePlus5Minutes = new Date(targetDate.getTime() + 5 * 60000); // 60000 milliseconds in a minute
+  
+  // Check if the current time is greater than the target time plus 5 minutes
+  return now > targetTimePlus5Minutes;
+}
+
+function getCurrentDate() {
+  const now = new Date();
+
+  // Get day, month, and year
+  const day = String(now.getDate()).padStart(2, '0');
+  const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+  const year = now.getFullYear();
+
+  // Combine into the desired format
+  const formattedDate = `${day}-${month}-${year}`;
+
+  return formattedDate;
+}
+
+const cronJob1 = new CronJob('*/5 * * * *', checkTripToConfirmMovement);
+// const cronJob = new CronJob('0 0 * * 3', yourTask);
+
