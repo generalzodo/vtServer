@@ -41,7 +41,7 @@ export const fetchSingleSubRoute = async (req, res) => {
     const result = await SubRoute.findOne({ _id: req.params.id });
     res.status(201).json({ success: true, data: result });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: err.message })
   }
 };
 
