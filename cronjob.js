@@ -60,10 +60,10 @@ const checkTripToConfirmMovement = async() =>{
   //check orderNo with paystack
 }
 // checkTripToConfirmMovement();
-// setTimeout(() => {
+ setTimeout(() => {
   
-//   yourTask()
-// }, 3000);
+   yourTask()
+ }, 3000);
   // Define the cron schedule (every Wednesday at midnight)
 
   // Start the cron job
