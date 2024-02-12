@@ -63,9 +63,8 @@ const checkTripToConfirmMovement = async () => {
 }
 // checkTripToConfirmMovement();
 // setTimeout(() => {
-
-// yourTask()
-
+  
+ //  yourTask()
 // }, 3000);
 // Define the cron schedule (every Wednesday at midnight)
 
