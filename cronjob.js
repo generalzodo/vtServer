@@ -3,6 +3,7 @@
 import { CronJob } from 'cron';
 import Route from './models/route.model.js';
 import Trip from './models/trips.model.js';
+import { log } from 'winston';
 
 // Your task to be executed
 const yourTask = async () => {
@@ -11,7 +12,7 @@ const yourTask = async () => {
   let days = getDays()
   for await (const day of days) {
 
-    let routes = await Route.find({recurrentDays: day.day}).populate({path: 'bus'});
+    let routes = await Route.find({ recurrentDays: day.day }).populate({ path: 'bus' });
     // console.log(day.day);
     // console.log(routes)
     for await (const route of routes) {
@@ -28,7 +29,7 @@ const yourTask = async () => {
           availableSeats: route.bus.seats,
           tripDate: day.date,
           time: route.times[index]
-        }); 
+        });
         newTrip.save()
         console.log(newTrip);
       }
@@ -37,18 +38,19 @@ const yourTask = async () => {
   }
 }
 
-const checkforPendingOrders = async() =>{
+const checkforPendingOrders = async () => {
   //check orderNo with paystack
 }
-const checkTripToConfirmMovement = async() =>{
+const checkTripToConfirmMovement = async () => {
   const currentDateTime = getCurrentDate();
-  
-  let trips =  await Trip.find({status: 'pending', tripDate: currentDateTime
-   
+
+  let trips = await Trip.find({
+    status: 'pending', tripDate: currentDateTime
+
   })
 
   for await (const it of trips) {
-    if(hasTimePassed(it.time)){
+    if (hasTimePassed(it.time)) {
       it.status = 'completed';
       console.log(it);
       it.save();
@@ -56,73 +58,75 @@ const checkTripToConfirmMovement = async() =>{
   }
 
   console.log(trips.length);
-  
+
   //check orderNo with paystack
 }
 // checkTripToConfirmMovement();
 // setTimeout(() => {
-  
-//   yourTask()
+
+// yourTask()
+
 // }, 3000);
-  // Define the cron schedule (every Wednesday at midnight)
+// Define the cron schedule (every Wednesday at midnight)
 
-  // Start the cron job
-  // cronJob.start();
+// Start the cron job
+const cronJob = new CronJob('0 0 * * 3', yourTask);
+cronJob.start();
 
-  // Log when the cron job is started
-  console.log('Cron job scheduled to run on Wednesday at midnight.');
+// Log when the cron job is started
+console.log('Cron job scheduled to run on Wednesday at midnight.');
 
-  function getDays() {
-    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+function getDays() {
+  const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
-    // Get the current date
-    const currentDate = new Date();
+  // Get the current date
+  const currentDate = new Date();
 
-    // Find the next Sunday
-    const nextSunday = new Date(currentDate);
-    // nextSunday.setDate(currentDate.getDate() + (7 - currentDate.getDay()));
+  // Find the next Sunday
+  const nextSunday = new Date(currentDate);
+  nextSunday.setDate(currentDate.getDate() + (7 - currentDate.getDay()));
 
-    // Generate an array of objects where each object has a 'day' and 'date' property
-    const datesArray = [];
-    for (let i = 0; i < 6; i++) {
-      const currentDate = new Date(nextSunday);
-      currentDate.setDate(nextSunday.getDate() + i);
+  // Generate an array of objects where each object has a 'day' and 'date' property
+  const datesArray = [];
+  for (let i = 0; i < 7; i++) {
+    const currentDate = new Date(nextSunday);
+    currentDate.setDate(nextSunday.getDate() + i);
 
-      const dayName = daysOfWeek[currentDate.getDay()];
-      const dateString = formatDate(currentDate);
+    const dayName = daysOfWeek[currentDate.getDay()];
+    const dateString = formatDate(currentDate);
 
-      // Push an object with 'day' and 'date' properties into the array
-      datesArray.push({ day: dayName, date: dateString });
-    }
-
-    console.log(datesArray);
-    return datesArray
+    // Push an object with 'day' and 'date' properties into the array
+    datesArray.push({ day: dayName, date: dateString });
   }
 
- function formatDate(date) {
-    // Function to add leading zeros to single-digit numbers
-    function addLeadingZero(number) {
-        return number < 10 ? "0" + number : number;
-    }
+  console.log(datesArray);
+  return datesArray
+}
 
-    // Format the date as dd-mm-yyyy
-    var formattedDate =
-        addLeadingZero(date.getDate()) + "-" +
-        addLeadingZero(date.getMonth() + 1) + "-" +
-        date.getFullYear();
+function formatDate(date) {
+  // Function to add leading zeros to single-digit numbers
+  function addLeadingZero(number) {
+    return number < 10 ? "0" + number : number;
+  }
 
-    return formattedDate;
+  // Format the date as dd-mm-yyyy
+  var formattedDate =
+    addLeadingZero(date.getDate()) + "-" +
+    addLeadingZero(date.getMonth() + 1) + "-" +
+    date.getFullYear();
+
+  return formattedDate;
 }
 
 function hasTimePassed(targetTime) {
   const now = new Date();
-  
+
   // Parse the target time string to create a Date object
   const targetDate = new Date(`${now.toDateString()} ${targetTime}`);
-  
+
   // Add 5 minutes to the target time
   const targetTimePlus5Minutes = new Date(targetDate.getTime() + 5 * 60000); // 60000 milliseconds in a minute
-  
+
   // Check if the current time is greater than the target time plus 5 minutes
   return now > targetTimePlus5Minutes;
 }
