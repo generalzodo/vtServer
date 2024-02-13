@@ -1,10 +1,13 @@
 // cronjob.js
 
 import { CronJob } from 'cron';
+const axios = require('axios');
+
 import Route from './models/route.model.js';
 import Trip from './models/trips.model.js';
+import Booking from './models/booking.model.js';
 import { log } from 'winston';
-
+const SECRET_KEY = 'sk_live_5d188bedd28dac0e4a3d5db6a1cc3912df97652f';
 // Your task to be executed
 const yourTask = async () => {
   console.log('Cron job is running on Wednesday!');
@@ -40,7 +43,63 @@ const yourTask = async () => {
 
 const checkforPendingOrders = async () => {
   //check orderNo with paystack
+  let bookings = await Booking.find({
+    paymentStatus: 'pending'
+
+  })
+
+  // console.log(bookings);
+  for await (const it of bookings) {
+    if (checkIfFifteenMinutesPassed(it.createdAt, 15)) {
+      // it.status = 'completed';
+      console.log('checking');
+
+      let status = await checkTransaction(it.bookingId);
+      if (status) {
+        it.paymentStatus = 'success';
+        it.paystack_ref = it.bookingId;
+      } else {
+        let trip = await Trip.findById(it.trip);
+        if (trip) {
+          trip.seats = removeItemFromArray(trip.seats, it.tripSeat);
+          trip.save()
+        }
+        if (it.returnTrip) {
+          let returnTrip = await Trip.findById(it.returnTrip);
+          if (returnTrip) {
+
+            returnTrip.seats = removeItemFromArray(returnTrip.seats, it.returnSeat);
+            returnTrip.save()
+          }
+        }
+        it.status = 'Cancelled, Seat freed';
+        it.paymentStatus = 'Payment Not Found';
+      }
+      it.save();
+    }
+  }
 }
+
+const checkTransaction = async (transactionId) => {
+  console.log(transactionId);
+  try {
+    const response = await axios.get(`https://api.paystack.co/transaction/verify/${transactionId}`, {
+      headers: {
+        Authorization: `Bearer ${SECRET_KEY}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const data = response.data;
+    // console.log(data);
+
+    // Return the status of the transaction
+    return data.status;
+  } catch (error) {
+    console.error('Error fetching transaction:', error.response.data);
+    return null;
+  }
+};
 const checkTripToConfirmMovement = async () => {
   const currentDateTime = getCurrentDate();
 
@@ -50,7 +109,7 @@ const checkTripToConfirmMovement = async () => {
   })
 
   for await (const it of trips) {
-    if (hasTimePassed(it.time)) {
+    if (hasTimePassed(it.time, 5)) {
       it.status = 'completed';
       console.log(it);
       it.save();
@@ -61,16 +120,22 @@ const checkTripToConfirmMovement = async () => {
 
   //check orderNo with paystack
 }
+checkforPendingOrders()
+
 // checkTripToConfirmMovement();
 // setTimeout(() => {
-  
- //  yourTask()
+
+//  yourTask()
 // }, 3000);
 // Define the cron schedule (every Wednesday at midnight)
 
 // Start the cron job
 const cronJob = new CronJob('0 0 * * 3', yourTask);
+const cronJob1 = new CronJob('*/5 * * * *', checkTripToConfirmMovement);
+const cronJob2 = new CronJob('*/5 * * * *', checkforPendingOrders);
 cronJob.start();
+cronJob1.start();
+cronJob2.start();
 
 // Log when the cron job is started
 console.log('Cron job scheduled to run on Wednesday at midnight.');
@@ -117,18 +182,29 @@ function formatDate(date) {
   return formattedDate;
 }
 
-function hasTimePassed(targetTime) {
+function hasTimePassed(targetTime, minutes) {
   const now = new Date();
 
   // Parse the target time string to create a Date object
   const targetDate = new Date(`${now.toDateString()} ${targetTime}`);
 
   // Add 5 minutes to the target time
-  const targetTimePlus5Minutes = new Date(targetDate.getTime() + 5 * 60000); // 60000 milliseconds in a minute
+  const targetTimePlus5Minutes = new Date(targetDate.getTime() + minutes * 60000); // 60000 milliseconds in a minute
 
   // Check if the current time is greater than the target time plus 5 minutes
   return now > targetTimePlus5Minutes;
 }
+const checkIfFifteenMinutesPassed = (datetime) => {
+  const fifteenMinutesInMilliseconds = 15 * 60 * 1000; // 15 minutes in milliseconds
+  const providedDate = new Date(datetime);
+  const currentDate = new Date();
+
+  // Calculate the difference in milliseconds between current time and provided datetime
+  const timeDifference = currentDate - providedDate;
+
+  // Check if the time difference is greater than or equal to 15 minutes
+  return timeDifference >= fifteenMinutesInMilliseconds;
+};
 
 function getCurrentDate() {
   const now = new Date();
@@ -142,8 +218,14 @@ function getCurrentDate() {
   const formattedDate = `${day}-${month}-${year}`;
 
   return formattedDate;
-}
 
-const cronJob1 = new CronJob('*/5 * * * *', checkTripToConfirmMovement);
+}
+const removeFirstCharacter = (str) => {
+  return str.substring(1);
+};
+const removeItemFromArray = (array, itemToRemove) => {
+  return array.filter(item => item !== itemToRemove);
+};
+
 // const cronJob = new CronJob('0 0 * * 3', yourTask);
 
