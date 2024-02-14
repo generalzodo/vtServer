@@ -42,11 +42,12 @@ const yourTask = async () => {
 }
 
 const checkforPendingOrders = async () => {
+  console.log('sss')
   //check orderNo with paystack
   let bookings = await Booking.find({
-    paymentStatus: 'pending'
+    // paymentStatus: 'pending'
 
-  })
+  }).limit(1)
 
   // console.log(bookings);
   for await (const it of bookings) {
@@ -55,7 +56,7 @@ const checkforPendingOrders = async () => {
       console.log('checking');
 
       let status = await checkTransaction(it.bookingId);
-      if (status) {
+      if (status == 'success') {
         it.paymentStatus = 'success';
         it.paystack_ref = it.bookingId;
       } else {
@@ -94,7 +95,7 @@ const checkTransaction = async (transactionId) => {
     // console.log(data);
 
     // Return the status of the transaction
-    return data.status;
+    return data.data.status;
   } catch (error) {
     console.error('Error fetching transaction:', error.response.data);
     return null;
