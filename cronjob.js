@@ -45,7 +45,7 @@ const checkforPendingOrders = async () => {
   console.log('sss')
   //check orderNo with paystack
   let bookings = await Booking.find({
-    // paymentStatus: 'pending'
+    paymentStatus: 'pending'
 
   }).limit(1)
 
