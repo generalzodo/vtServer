@@ -47,11 +47,11 @@ const checkforPendingOrders = async () => {
   let bookings = await Booking.find({
     paymentStatus: 'pending'
 
-  }).limit(1)
+  })
 
   // console.log(bookings);
   for await (const it of bookings) {
-    if (checkIfFifteenMinutesPassed(it.createdAt, 15)) {
+    if (checkIfFifteenMinutesPassed(it.createdAt, 30)) {
       // it.status = 'completed';
       console.log('checking');
 
@@ -97,7 +97,7 @@ const checkTransaction = async (transactionId) => {
     // Return the status of the transaction
     return data.data.status;
   } catch (error) {
-    console.error('Error fetching transaction:', error.response.data);
+    console.error('Error fetching transaction:', error.response?.data);
     return null;
   }
 };
@@ -108,6 +108,7 @@ const checkTripToConfirmMovement = async () => {
     status: 'pending', tripDate: currentDateTime
 
   })
+  console.log(trips.length, currentDateTime);
 
   for await (const it of trips) {
     if (hasTimePassed(it.time, 5)) {
