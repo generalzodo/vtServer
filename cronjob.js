@@ -63,6 +63,7 @@ const checkforPendingOrders = async () => {
         let trip = await Trip.findById(it.trip);
         if (trip) {
           trip.seats = removeItemFromArray(trip.seats, it.tripSeat);
+          trip.availableSeats = parseInt(trip.availableSeats) + 1
           trip.save()
         }
         if (it.returnTrip) {
@@ -70,6 +71,8 @@ const checkforPendingOrders = async () => {
           if (returnTrip) {
 
             returnTrip.seats = removeItemFromArray(returnTrip.seats, it.returnSeat);
+            returnTrip.availableSeats = parseInt(returnTrip.availableSeats) + 1
+
             returnTrip.save()
           }
         }
@@ -138,7 +141,7 @@ const checkTripToConfirmMovement = async () => {
 }
 // checkforPendingOrders()
 
-checkTripToConfirmMovement();
+// checkTripToConfirmMovement();
 // setTimeout(() => {
 
 //  yourTask()
@@ -210,8 +213,8 @@ function hasTimePassed(targetTime, minutes) {
   // Check if the current time is greater than the target time plus 5 minutes
   return now > targetTimePlus5Minutes;
 }
-const checkIfFifteenMinutesPassed = (datetime) => {
-  const fifteenMinutesInMilliseconds = 15 * 60 * 1000; // 15 minutes in milliseconds
+const checkIfFifteenMinutesPassed = (datetime, time) => {
+  const fifteenMinutesInMilliseconds = time * 60 * 1000; // 15 minutes in milliseconds
   const providedDate = new Date(datetime);
   const currentDate = new Date();
 
