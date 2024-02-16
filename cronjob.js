@@ -108,6 +108,20 @@ const checkTripToConfirmMovement = async () => {
     status: 'pending', tripDate: currentDateTime
 
   })
+//   let trips = await Trip.find({
+//     tripDate: 
+//    [
+//      '22-02-2024',
+//      '21-02-2024',
+//      '20-02-2024',
+//      '19-02-2024',
+//      '18-02-2024',
+//      '17-02-2024',
+//      '16-02-2024'
+//    ]
+//    // currentDateTime
+
+//  })
   console.log(trips.length, currentDateTime);
 
   for await (const it of trips) {
@@ -122,9 +136,9 @@ const checkTripToConfirmMovement = async () => {
 
   //check orderNo with paystack
 }
-checkforPendingOrders()
+// checkforPendingOrders()
 
-// checkTripToConfirmMovement();
+checkTripToConfirmMovement();
 // setTimeout(() => {
 
 //  yourTask()
@@ -133,7 +147,7 @@ checkforPendingOrders()
 
 // Start the cron job
 const cronJob = new CronJob('0 0 * * 3', yourTask);
-const cronJob1 = new CronJob('*/5 * * * *', checkTripToConfirmMovement);
+const cronJob1 = new CronJob('*/10 * * * *', checkTripToConfirmMovement);
 const cronJob2 = new CronJob('*/5 * * * *', checkforPendingOrders);
 cronJob.start();
 cronJob1.start();
