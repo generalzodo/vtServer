@@ -4,6 +4,7 @@ import { CronJob } from 'cron';
 const axios = require('axios');
 
 import Route from './models/route.model.js';
+import Bus from './models/bus.model.js';
 import Trip from './models/trips.model.js';
 import Booking from './models/booking.model.js';
 import { log } from 'winston';
@@ -139,6 +140,20 @@ const checkTripToConfirmMovement = async () => {
 
   //check orderNo with paystack
 }
+const recalibrateTrips = async () => {
+  let trips =  await Trip.find({}).populate('route');
+  // console.log(trips);
+  for await (const it of trips) {
+    if(it.route){
+      console.log('checkid');
+      let bus =  await Bus.findById(it.route.bus);
+      it.availableSeats = bus.seats;
+      it.save()
+    }
+  }
+}
+
+recalibrateTrips();
 // checkforPendingOrders()
 
 // checkTripToConfirmMovement();

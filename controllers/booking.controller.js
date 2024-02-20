@@ -52,6 +52,25 @@ export const createBooking = async (req, res) => {
     let returntrip = await Trip.findById(req.body.returnTrip)
     console.log(returntrip);
     for await (const it of passengers) {
+      if (trip.seats.includes(it.tripSeat)) {
+        throw new Error('One ore more seats selected is unavailable')
+
+      }
+      trip.seats.push(it.tripSeat)
+      if (returntrip) {
+        // returntrip.availableSeats = returntrip.availableSeats - 1
+        if (returntrip.seats.includes(it.returnSeat)) {
+        throw new Error('One ore more seats selected is unavailable')
+          
+        }
+
+        returntrip.seats.push(it.returnSeat);
+
+      }
+    }
+
+      for await (const it of passengers) {
+
       let emergency = it.emergencyContact
 
       const newBooking = new Booking({
@@ -81,17 +100,13 @@ export const createBooking = async (req, res) => {
         user: req.body.user,
         paymentStatus: 'pending'
       });
+   
       await newBooking.save();
-      trip.availableSeats = trip.availableSeats - 1
-      trip.seats.push(it.tripSeat)
       await trip.save();
-
       if (returntrip) {
-        returntrip.availableSeats = returntrip.availableSeats - 1
-        returntrip.seats.push(it.returnSeat)
-        await returntrip.save();
-      }
 
+      await returntrip.save();
+      }
     }
 
     const result = { status: 'success', data: 'T' + bookingId }
@@ -104,24 +119,24 @@ export const createBooking = async (req, res) => {
 export const updateBooking = async (req, res) => {
   try {
 
-  let isError = { error: false, message: "" };
-  for (const key in req.body) {
-    let isBoolean = typeof req.body[key] === "boolean";
-    if (!isBoolean) {
-      if (!req.body[key]) {
-        console.log(`${key} is empty`);
-        isError = {
-          error: true,
-          message: `${key} cannot be empty. Add a value or remove it from the request body`,
-        };
+    let isError = { error: false, message: "" };
+    for (const key in req.body) {
+      let isBoolean = typeof req.body[key] === "boolean";
+      if (!isBoolean) {
+        if (!req.body[key]) {
+          console.log(`${key} is empty`);
+          isError = {
+            error: true,
+            message: `${key} cannot be empty. Add a value or remove it from the request body`,
+          };
+        }
       }
     }
-  }
-  if (isError.error) {
-    // res.status(400).json(isError);
-    throw new Error('Something went wrong, pls try again later')
+    if (isError.error) {
+      // res.status(400).json(isError);
+      throw new Error('Something went wrong, pls try again later')
 
-  }
+    }
     const result = await Booking.updateMany({ bookingId: req.params.id }, { ...req.body });
     res.status(201).json(result);
   } catch (err) {
@@ -136,7 +151,7 @@ export const cancelBooking = async (req, res) => {
       throw new Error('this ticket has already been used')
     }
 
-    res.status(201).json(booking, );
+    res.status(201).json(booking,);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
