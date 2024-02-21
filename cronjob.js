@@ -72,7 +72,7 @@ const checkforPendingOrders = async () => {
           if (returnTrip) {
 
             returnTrip.seats = removeItemFromArray(returnTrip.seats, it.returnSeat);
-            returnTrip.availableSeats = parseInt(returnTrip.availableSeats) + 1
+            // returnTrip.availableSeats = parseInt(returnTrip.availableSeats) + 1
 
             returnTrip.save()
           }
