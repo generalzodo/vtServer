@@ -157,13 +157,13 @@ const checkTripToConfirmMovement = async () => {
 // recalibrateTrips();
 // checkforPendingOrders()
 
-// checkTripToConfirmMovement();
+checkTripToConfirmMovement();
 // setTimeout(() => {
 
 //  yourTask()
 // }, 3000);
 // Define the cron schedule (every Wednesday at midnight)
-// console.log(hasTimePassed('11:00 AM', 5));
+// console.log(hasTimePassed('01:30 PM', 5));
 
 // Start the cron job
 const cronJob = new CronJob('0 0 * * 3', yourTask);
