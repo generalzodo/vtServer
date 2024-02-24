@@ -21,6 +21,9 @@ export const fetchTripsManifest = async (req, res) => {
   try {
     const result = await Booking.find({
       $or: [
+        { status: 'pending' },      // Find users who are 18 or older
+        { status: 'completed' }],
+      $or: [
         { trip: req.params.id },      // Find users who are 18 or older
         { returnTrip: req.params.id }]
     })

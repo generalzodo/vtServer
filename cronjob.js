@@ -129,6 +129,7 @@ const checkTripToConfirmMovement = async () => {
   console.log(trips.length, currentDateTime);
 
   for await (const it of trips) {
+    console.log(it.time);
     if (hasTimePassed(it.time, 5)) {
       it.status = 'completed';
       console.log(it);
@@ -140,20 +141,20 @@ const checkTripToConfirmMovement = async () => {
 
   //check orderNo with paystack
 }
-const recalibrateTrips = async () => {
-  let trips =  await Trip.find({}).populate('route');
-  // console.log(trips);
-  for await (const it of trips) {
-    if(it.route){
-      console.log('checkid');
-      let bus =  await Bus.findById(it.route.bus);
-      it.availableSeats = bus.seats;
-      it.save()
-    }
-  }
-}
+// const recalibrateTrips = async () => {
+//   let trips =  await Trip.find({}).populate('route');
+//   // console.log(trips);
+//   for await (const it of trips) {
+//     if(it.route){
+//       console.log('checkid');
+//       let bus =  await Bus.findById(it.route.bus);
+//       it.availableSeats = bus.seats;
+//       it.save()
+//     }
+//   }
+// }
 
-recalibrateTrips();
+// recalibrateTrips();
 // checkforPendingOrders()
 
 // checkTripToConfirmMovement();
@@ -162,10 +163,11 @@ recalibrateTrips();
 //  yourTask()
 // }, 3000);
 // Define the cron schedule (every Wednesday at midnight)
+// console.log(hasTimePassed('11:00 AM', 5));
 
 // Start the cron job
 const cronJob = new CronJob('0 0 * * 3', yourTask);
-const cronJob1 = new CronJob('*/10 * * * *', checkTripToConfirmMovement);
+const cronJob1 = new CronJob('*/5 * * * *', checkTripToConfirmMovement);
 const cronJob2 = new CronJob('*/5 * * * *', checkforPendingOrders);
 cronJob.start();
 cronJob1.start();
@@ -229,7 +231,7 @@ function hasTimePassed(targetTime, minutes) {
   return now > targetTimePlus5Minutes;
 }
 const checkIfFifteenMinutesPassed = (datetime, time) => {
-  const fifteenMinutesInMilliseconds = time * 60 * 1000; // 15 minutes in milliseconds
+  const fifteenMinutesInMilliseconds = time * 30 * 1000; // 15 minutes in milliseconds
   const providedDate = new Date(datetime);
   const currentDate = new Date();
 
