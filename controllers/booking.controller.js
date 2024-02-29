@@ -98,7 +98,7 @@ export const createBooking = async (req, res) => {
         tripSeat: it.tripSeat,
         returnSeat: it.returnSeat,
         user: req.body.user,
-        paymentStatus: paymentStatus
+        paymentStatus: req.body.paymentStatus
       });
    
       await newBooking.save();
