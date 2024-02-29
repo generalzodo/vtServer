@@ -36,7 +36,7 @@ export const fetchAllBooking = async (req, res) => {
 };
 export const fetchUserBooking = async (req, res) => {
   try {
-    const result = await Booking.find({ user: req.params.id, $or: { paymentStatus: 'success', paymentStatus: 'admin paid' } }).populate('trip').sort({ createdAt: -1 });
+    const result = await Booking.find({ user: req.params.id, $or: [{ paymentStatus: 'success', paymentStatus: 'admin paid' }] }).populate('trip').sort({ createdAt: -1 });
     res.status(201).json({ success: true, data: result });
   } catch (err) {
     res.status(500).json({ error: err.message });
