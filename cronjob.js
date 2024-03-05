@@ -52,7 +52,7 @@ const checkforPendingOrders = async () => {
 
   // console.log(bookings);
   for await (const it of bookings) {
-    if (checkIfFifteenMinutesPassed(it.createdAt,60)) {
+    if (checkIfFifteenMinutesPassed(it.createdAt, 60)) {
       // it.status = 'completed';
       console.log('checking');
 
@@ -112,28 +112,28 @@ const checkTripToConfirmMovement = async () => {
     status: 'pending', tripDate: currentDateTime
 
   })
-//   let trips = await Trip.find({
-//     tripDate: 
-//    [
-//      '22-02-2024',
-//      '21-02-2024',
-//      '20-02-2024',
-//      '19-02-2024',
-//      '18-02-2024',
-//      '17-02-2024',
-//      '16-02-2024'
-//    ]
-//    // currentDateTime
+  //   let trips = await Trip.find({
+  //     tripDate: 
+  //    [
+  //      '22-02-2024',
+  //      '21-02-2024',
+  //      '20-02-2024',
+  //      '19-02-2024',
+  //      '18-02-2024',
+  //      '17-02-2024',
+  //      '16-02-2024'
+  //    ]
+  //    // currentDateTime
 
-//  })
+  //  })
   console.log(trips.length, currentDateTime);
 
   for await (const it of trips) {
     console.log(it.time);
     if (hasTimePassed(it.time, 5)) {
-      it.status = 'completed';
-      console.log(it);
+      it.status = 'completed'; 
       it.save();
+      await Booking.updateMany({ trip: it._id, status: 'pending' }, { status: 'completed' });
     }
   }
 
@@ -157,7 +157,7 @@ const checkTripToConfirmMovement = async () => {
 // recalibrateTrips();
 // checkforPendingOrders()
 
-checkTripToConfirmMovement();
+// checkTripToConfirmMovement();
 // setTimeout(() => {
 
 //  yourTask()

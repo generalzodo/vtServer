@@ -95,6 +95,10 @@ export const updateTrip = async (req, res) => {
 
     }
     const result = await Trip.updateOne({ _id: req.params.id }, { ...req.body });
+    if(req.body.status){
+    const result = await Booking.updateMany({ trip: req.params.id, status:'pending' }, {status: req.body.status });
+      
+    }
     res.status(201).json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
