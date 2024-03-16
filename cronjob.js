@@ -52,7 +52,7 @@ const checkforPendingOrders = async () => {
 
   // console.log(bookings);
   for await (const it of bookings) {
-    if (checkIfFifteenMinutesPassed(it.createdAt, 60)) {
+    if (checkIfFifteenMinutesPassed(it.createdAt, 30)) {
       // it.status = 'completed';
       console.log('checking');
 
