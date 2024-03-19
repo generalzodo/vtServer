@@ -1,5 +1,5 @@
 import express from 'express';
-import { createUser, deleteUser,loginUser, fetchSingleUser, fetchUsers, updateUser, changePassword, verifyEmail } from '../controllers/user.controller.js';
+import { createUser, deleteUser,loginUser, fetchSingleUser, fetchUsers, updateUser, changePassword, verifyEmail, loginAdmin } from '../controllers/user.controller.js';
 
 const router = express.Router();
 /**
@@ -39,6 +39,7 @@ const router = express.Router();
 router.post('/', createUser);
 router.post('/register', createUser);
 router.post('/login', loginUser);
+router.post('/alogin', loginAdmin);
 router.patch('/:id', updateUser);
 router.post('/changePassword/:id', changePassword);
 router.get('/verifyEmail/:token', verifyEmail);

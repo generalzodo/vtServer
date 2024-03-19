@@ -159,6 +159,56 @@ export const loginUser = async (req, res) => {
   }
 };
 
+export const loginAdmin = async (req, res) => {
+  try {
+    const user = await User.findOne({
+      email: req.body.email.toLowerCase(),
+      type: 'admin'
+    })
+    console.log(user);
+    
+    if (!user) {
+      throw new Error('No such user found')
+    }
+    if (user.status == 'locked') {
+      throw new Error('You have been locked out of this system. please contact the adminstrator')
+    }
+    if (user.status == 'inactive') {
+      throw new Error('Kindly verify your email used during sign up to gain access')
+    }
+    // 2
+    console.log(user);
+    
+    const valid = await bcrypt.compare(req.body.password, user.password)
+    if (!valid) {
+      throw new Error('Invalid password')
+    }
+    
+    const token =  'fmefmekfmekfme'
+    // jwt.sign({
+    //   userId: user._id
+    // }, APP_SECRET);
+    
+    // let activity = new Activity({
+    //   // type: data.type,
+    //   text: "Logged in",
+    //   operation: "Login",
+    //   device: args.device,
+    //   userId: user._id,
+    // })
+    // await activity.save();
+    
+    // 3
+    
+    res.status(201).json({
+      token,
+      user,
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 export const updateUser = async (req, res) => {
   try {
 
