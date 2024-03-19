@@ -2,6 +2,7 @@ import User from '../models/users.model.js';
 import bcrypt from "bcrypt";
 // import jwt from 'jsonwebtoken'
 import mail from './../mail.js';
+import { createToken, isLoggedIn } from "../../middleware/index.js";
 
 /**
  * Create a new User item.
@@ -134,7 +135,8 @@ export const loginUser = async (req, res) => {
       throw new Error('Invalid password')
     }
     
-    const token =  'fmefmekfmekfme'
+    const token = createToken(user._id);
+
     // jwt.sign({
     //   userId: user._id
     // }, APP_SECRET);
@@ -183,8 +185,7 @@ export const loginAdmin = async (req, res) => {
     if (!valid) {
       throw new Error('Invalid password')
     }
-    
-    const token =  'fmefmekfmekfme'
+    const token = createToken(user._id);
     // jwt.sign({
     //   userId: user._id
     // }, APP_SECRET);

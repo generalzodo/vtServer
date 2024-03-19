@@ -9,7 +9,7 @@ import BookingRouter from "./booking.route.js";
 import BusRouter from "./bus.route.js";
 import TripRouter from "./trip.route.js";
 import UserRouter from "./user.route.js";
-// import { isLoggedIn } from "../middleware/index.js";
+import { isLoggedIn } from "../middleware/auth.js";
 
 const router = Router();
 
