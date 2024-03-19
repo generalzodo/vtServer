@@ -2,7 +2,7 @@ import User from '../models/users.model.js';
 import bcrypt from "bcrypt";
 // import jwt from 'jsonwebtoken'
 import mail from './../mail.js';
-import { createToken, isLoggedIn } from "../../middleware/index.js";
+import { createToken, isLoggedIn } from '../middleware/auth.js';
 
 /**
  * Create a new User item.
